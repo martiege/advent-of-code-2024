@@ -28,3 +28,9 @@ dhat-heap.json
 # Benchmarks
 
 data/timings.json
+
+
+### Created by https://www.gitignore.io
+### direnv ###
+.direnv
+.envrc
