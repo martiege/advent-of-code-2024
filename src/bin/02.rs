@@ -1,10 +1,7 @@
 use std::cmp::max;
 
 use nom::{
-    bytes::complete::tag,
-    character::complete::digit1,
-    combinator::map_res,
-    multi::separated_list1,
+    bytes::complete::tag, character::complete::digit1, combinator::map_res, multi::separated_list1,
     IResult,
 };
 
@@ -50,7 +47,9 @@ fn accumulate_safe(acc: usize, data: &[u32]) -> usize {
 
 pub fn part_one(input: &str) -> Option<u32> {
     if let Ok((_, data)) = parse(input) {
-        Some(data.iter().fold(0, |arg0: usize, arg1: &Vec<u32>| accumulate_safe(arg0, arg1)) as u32)
+        Some(data.iter().fold(0, |arg0: usize, arg1: &Vec<u32>| {
+            accumulate_safe(arg0, arg1)
+        }) as u32)
     } else {
         None
     }
