@@ -39,7 +39,7 @@ fn parse(input: &str) -> (HashMap<u32, Vec<u32>>, Vec<Vec<u32>>) {
 
 fn update_is_valid(update: &Vec<u32>, orders: &HashMap<u32, Vec<u32>>) -> bool {
     for (i, u) in update.iter().enumerate() {
-        if let Some(order) = orders.get(&u) {
+        if let Some(order) = orders.get(u) {
             for o in order {
                 if update[..i].contains(o) {
                     // update is wrong
@@ -69,7 +69,7 @@ fn sub_reorder_update(update: &Vec<u32>, orders: &HashMap<u32, Vec<u32>>) -> Vec
     let mut result = update.clone();
 
     for (i, u) in update.iter().enumerate() {
-        if let Some(order) = orders.get(&u) {
+        if let Some(order) = orders.get(u) {
             for o in order {
                 if let Some(p) = result[..i].iter().position(|x| x == o) {
                     result.swap(p, i);
@@ -83,7 +83,7 @@ fn sub_reorder_update(update: &Vec<u32>, orders: &HashMap<u32, Vec<u32>>) -> Vec
 
 fn reorder_update(update: &Vec<u32>, orders: &HashMap<u32, Vec<u32>>) -> Vec<u32> {
     let mut result = update.clone();
-    while ! update_is_valid(&result, orders) {
+    while !update_is_valid(&result, orders) {
         result = sub_reorder_update(&result, orders);
     }
 
@@ -101,11 +101,6 @@ pub fn part_two(input: &str) -> Option<u32> {
 
         let new_update = reorder_update(&update, &orders);
 
-        if ! update_is_valid(&new_update, &orders) {
-            dbg!(&orders);
-            dbg!(&update);
-            dbg!(&new_update);
-        }
         sum += new_update[new_update.len() / 2];
     }
 
