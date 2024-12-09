@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use itertools::Itertools;
 use nom::{
     bytes::complete::tag,
     character::complete::digit1,

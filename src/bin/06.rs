@@ -1,7 +1,7 @@
-use std::{collections::HashSet, thread::spawn};
+use std::collections::HashSet;
 
 use itertools::Itertools;
-use rayon::iter::{IntoParallelRefIterator, ParallelBridge, ParallelIterator};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 advent_of_code::solution!(6);
 
