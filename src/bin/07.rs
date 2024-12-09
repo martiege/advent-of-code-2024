@@ -24,7 +24,7 @@ fn parse(input: &str) -> IResult<&str, Vec<(usize, Vec<u32>)>> {
     )(input)
 }
 
-fn matches(sum: usize, vector: &[u32]) -> bool{
+fn matches(sum: usize, vector: &[u32]) -> bool {
     let mut results = HashSet::new();
     results.insert(0);
     results.insert(1);
@@ -52,25 +52,23 @@ pub fn part_one(input: &str) -> Option<usize> {
     if let Ok((rest, data)) = data {
         assert!(rest.trim().is_empty());
         Some(
-            data
-            .par_iter()
-                .map(|(s, v)| if matches(*s, v) { *s } else {0} )
-                .sum()
-            // data
-            //     // .iter()
-            //     .par_iter()
-            //     .map(
-            //         |(s, v)| {
-            //         if get_all_operations(&v.iter().tuple_windows().collect_vec())
-            //             .filter_map(|x| operations_folder(*s, &x))
-            //             .any(|x| x == *s)
-            //         {
-            //             *s
-            //         } else {
-            //             0
-            //         }
-            //     })
-            //     .sum(),
+            data.par_iter()
+                .map(|(s, v)| if matches(*s, v) { *s } else { 0 })
+                .sum(), // data
+                        //     // .iter()
+                        //     .par_iter()
+                        //     .map(
+                        //         |(s, v)| {
+                        //         if get_all_operations(&v.iter().tuple_windows().collect_vec())
+                        //             .filter_map(|x| operations_folder(*s, &x))
+                        //             .any(|x| x == *s)
+                        //         {
+                        //             *s
+                        //         } else {
+                        //             0
+                        //         }
+                        //     })
+                        //     .sum(),
         )
     } else {
         None

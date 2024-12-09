@@ -10,12 +10,8 @@ struct Coordinate {
     col: i128,
 }
 
-
 fn parse(input: &str) -> (Coordinate, HashMap<char, Vec<Coordinate>>) {
-    let mut size = Coordinate {
-        row: 0,
-        col: 0,
-    };
+    let mut size = Coordinate { row: 0, col: 0 };
 
     let mut antennas: HashMap<char, Vec<Coordinate>> = HashMap::new();
 
@@ -27,10 +23,18 @@ fn parse(input: &str) -> (Coordinate, HashMap<char, Vec<Coordinate>>) {
         for (col, c) in line.trim().chars().enumerate() {
             if c != '.' {
                 if let Some(v) = antennas.get_mut(&c) {
-                    v.push(Coordinate {row: row as i128, col: col as i128})
-                }
-                else {
-                    antennas.insert(c, vec![Coordinate {row: row as i128, col: col as i128}]);
+                    v.push(Coordinate {
+                        row: row as i128,
+                        col: col as i128,
+                    })
+                } else {
+                    antennas.insert(
+                        c,
+                        vec![Coordinate {
+                            row: row as i128,
+                            col: col as i128,
+                        }],
+                    );
                 }
             }
         }
@@ -46,8 +50,7 @@ fn in_board(antenna: &Coordinate, size: &Coordinate) -> bool {
 fn validate(antenna: Coordinate, size: &Coordinate) -> Option<Coordinate> {
     if in_board(&antenna, size) {
         Some(antenna)
-    }
-    else {
+    } else {
         None
     }
 }
@@ -67,10 +70,7 @@ fn nearest_antinodes(antennas: &[&Coordinate], size: &Coordinate) -> Vec<Option<
         col: antennas[0].col - d.col,
     };
 
-    vec![
-        validate(a1, size),
-        validate(a2, size),
-    ]
+    vec![validate(a1, size), validate(a2, size)]
 }
 
 fn line_antinodes(antennas: &[&Coordinate], size: &Coordinate) -> Vec<Option<Coordinate>> {
@@ -104,7 +104,11 @@ fn line_antinodes(antennas: &[&Coordinate], size: &Coordinate) -> Vec<Option<Coo
     results
 }
 
-fn all_antinodes(antennas: &[Coordinate], size: &Coordinate, f: fn(&[&Coordinate], &Coordinate) -> Vec<Option<Coordinate>>) -> Vec<Coordinate> {
+fn all_antinodes(
+    antennas: &[Coordinate],
+    size: &Coordinate,
+    f: fn(&[&Coordinate], &Coordinate) -> Vec<Option<Coordinate>>,
+) -> Vec<Coordinate> {
     antennas
         .iter()
         .permutations(2)
@@ -118,26 +122,22 @@ pub fn part_one(input: &str) -> Option<usize> {
     let (size, data) = parse(input);
 
     Some(
-        data
-            .values()
+        data.values()
             .flat_map(|v| all_antinodes(v, &size, nearest_antinodes))
             .unique()
-            .count()
+            .count(),
     )
 }
 
 pub fn part_two(input: &str) -> Option<usize> {
     let (size, data) = parse(input);
 
-    let result=
-        data
-            .values()
-            .flat_map(|v| all_antinodes(v, &size, line_antinodes))
-            .unique();
+    let result = data
+        .values()
+        .flat_map(|v| all_antinodes(v, &size, line_antinodes))
+        .unique();
 
-    Some(
-            result.count()
-    )
+    Some(result.count())
 }
 
 #[cfg(test)]
