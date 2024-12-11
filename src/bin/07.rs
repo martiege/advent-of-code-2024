@@ -23,7 +23,7 @@ fn parse(input: &str) -> IResult<&str, Vec<(usize, Vec<u32>)>> {
     )(input)
 }
 
-fn matches(sum: usize, vector: &[u32]) -> bool {
+fn matches(sum: usize, vector: &[u32], operators: &[fn(usize, usize) -> usize]) -> bool {
     let mut results = HashSet::new();
     results.insert(0);
     results.insert(1);
@@ -34,10 +34,15 @@ fn matches(sum: usize, vector: &[u32]) -> bool {
             if r > sum {
                 continue;
             }
-            let t = r + *v as usize;
-            new_results.insert(t);
-            let t = r * *v as usize;
-            new_results.insert(t);
+            for o in operators {
+                new_results.insert(
+                    o(r, *v as usize)
+                );
+            }
+            // let t = r + *v as usize;
+            // new_results.insert(t);
+            // let t = r * *v as usize;
+            // new_results.insert(t);
         }
         results = new_results;
     }
@@ -52,30 +57,32 @@ pub fn part_one(input: &str) -> Option<usize> {
         assert!(rest.trim().is_empty());
         Some(
             data.par_iter()
-                .map(|(s, v)| if matches(*s, v) { *s } else { 0 })
-                .sum(), // data
-                        //     // .iter()
-                        //     .par_iter()
-                        //     .map(
-                        //         |(s, v)| {
-                        //         if get_all_operations(&v.iter().tuple_windows().collect_vec())
-                        //             .filter_map(|x| operations_folder(*s, &x))
-                        //             .any(|x| x == *s)
-                        //         {
-                        //             *s
-                        //         } else {
-                        //             0
-                        //         }
-                        //     })
-                        //     .sum(),
+                .map(|(s, v)| if matches(*s, v, &[|a, b| a + b, |a, b| a * b]) { *s } else { 0 })
+                .sum(),
         )
     } else {
         None
     }
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
-    None
+pub fn part_two(input: &str) -> Option<usize> {
+    let data = parse(input);
+    let operators = [
+        |a, b| a + b,
+        |a, b| a * b,
+        |a: usize, b: usize| (a.to_string() + &b.to_string()).parse::<usize>().expect("this shouldn't fail")
+    ];
+
+    if let Ok((rest, data)) = data {
+        assert!(rest.trim().is_empty());
+        Some(
+            data.par_iter()
+                .map(|(s, v)| if matches(*s, v, &operators) { *s } else { 0 })
+                .sum(),
+        )
+    } else {
+        None
+    }
 }
 
 #[cfg(test)]
@@ -91,6 +98,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(11387));
     }
 }
