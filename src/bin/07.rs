@@ -35,9 +35,7 @@ fn matches(sum: usize, vector: &[u32], operators: &[fn(usize, usize) -> usize]) 
                 continue;
             }
             for o in operators {
-                new_results.insert(
-                    o(r, *v as usize)
-                );
+                new_results.insert(o(r, *v as usize));
             }
             // let t = r + *v as usize;
             // new_results.insert(t);
@@ -57,7 +55,13 @@ pub fn part_one(input: &str) -> Option<usize> {
         assert!(rest.trim().is_empty());
         Some(
             data.par_iter()
-                .map(|(s, v)| if matches(*s, v, &[|a, b| a + b, |a, b| a * b]) { *s } else { 0 })
+                .map(|(s, v)| {
+                    if matches(*s, v, &[|a, b| a + b, |a, b| a * b]) {
+                        *s
+                    } else {
+                        0
+                    }
+                })
                 .sum(),
         )
     } else {
@@ -70,7 +74,11 @@ pub fn part_two(input: &str) -> Option<usize> {
     let operators = [
         |a, b| a + b,
         |a, b| a * b,
-        |a: usize, b: usize| (a.to_string() + &b.to_string()).parse::<usize>().expect("this shouldn't fail")
+        |a: usize, b: usize| {
+            (a.to_string() + &b.to_string())
+                .parse::<usize>()
+                .expect("this shouldn't fail")
+        },
     ];
 
     if let Ok((rest, data)) = data {
