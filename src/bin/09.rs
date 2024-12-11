@@ -48,7 +48,7 @@ impl Block {
 pub fn part_one(input: &str) -> Option<usize> {
     let mut disk: Vec<Option<usize>> = input
         .chars()
-        .filter(|&c| c.is_digit(10)) // No whitespace.
+        .filter(|&c| c.is_ascii_digit()) // No whitespace.
         .filter_map(|c| c.to_digit(10)) // Convert to digit.
         .map(|c| c as usize) // We'll use this as the size of the vec.
         .enumerate()
@@ -96,7 +96,7 @@ pub fn part_one(input: &str) -> Option<usize> {
 pub fn part_two(input: &str) -> Option<usize> {
     let mut disk: Vec<Block> = input
         .chars()
-        .filter(|&c| c.is_digit(10))
+        .filter(|&c| c.is_ascii_digit())
         .filter_map(|c| c.to_digit(10))
         .map(|c| c as usize)
         .enumerate()
