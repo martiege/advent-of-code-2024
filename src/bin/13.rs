@@ -201,14 +201,12 @@ fn improved_find_minimum_token(machine: &Machine) -> Option<usize> {
 pub fn part_one(input: &str) -> Option<usize> {
     if let Ok((_rest, data)) = parse(input) {
         Some(
-            data
-            .iter()
-            // .filter_map(naive_find_minimum_token)
-            .filter_map(improved_find_minimum_token)
-            .sum()
+            data.iter()
+                // .filter_map(naive_find_minimum_token)
+                .filter_map(improved_find_minimum_token)
+                .sum(),
         )
-    }
-    else {
+    } else {
         None
     }
 }
@@ -217,19 +215,20 @@ pub fn part_two(input: &str) -> Option<usize> {
     let offset = 10000000000000;
     if let Ok((_rest, data)) = parse(input) {
         Some(
-            data
-            .iter()
-            .map(|Machine {a, b, p}| Machine {
-                    a: ButtonSettings {dx: a.dx, dy: a.dy},
-                    b: ButtonSettings {dx: b.dx, dy: b.dy},
+            data.iter()
+                .map(|Machine { a, b, p }| Machine {
+                    a: ButtonSettings { dx: a.dx, dy: a.dy },
+                    b: ButtonSettings { dx: b.dx, dy: b.dy },
                     // p: PrizeLocation {x: p.x + offset, y: p.y + offset}
-                    p: PrizeLocation {x: p.x.checked_add(offset).unwrap(), y: p.y.checked_add(offset).unwrap()}
+                    p: PrizeLocation {
+                        x: p.x.checked_add(offset).unwrap(),
+                        y: p.y.checked_add(offset).unwrap(),
+                    },
                 })
-            .filter_map(|machine| improved_find_minimum_token(&machine))
-            .sum()
+                .filter_map(|machine| improved_find_minimum_token(&machine))
+                .sum(),
         )
-    }
-    else {
+    } else {
         None
     }
 }
@@ -247,6 +246,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(875318608908));
     }
 }
